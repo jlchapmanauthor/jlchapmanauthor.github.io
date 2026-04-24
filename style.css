@@ -664,3 +664,45 @@ a {
     border-radius: 24px;
   }
 }
+/* Cover image sizing fix */
+.book-card {
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+}
+
+.real-cover {
+  width: 190px;
+  height: 285px;
+  object-fit: contain;
+  background: #050505;
+  padding: 6px;
+  border-radius: 16px;
+  justify-self: center;
+}
+
+.book-info {
+  align-self: center;
+}
+
+.book-info h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .book-card {
+    grid-template-columns: 1fr;
+  }
+
+  .real-cover {
+    width: 190px;
+    height: 285px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 540px) {
+  .real-cover {
+    width: 170px;
+    height: 255px;
+  }
+}
