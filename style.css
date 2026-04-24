@@ -71,13 +71,25 @@ a {
   gap: 24px;
 }
 
-.logo {
+.logo-block {
   text-decoration: none;
+  display: grid;
+  gap: 2px;
+}
+
+.logo-main {
   color: var(--cream);
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 800;
+}
+
+.logo-sub {
+  color: var(--gold-bright);
+  font-size: 0.68rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
 }
 
 .nav {
@@ -99,7 +111,7 @@ a {
 }
 
 .hero {
-  min-height: 820px;
+  min-height: 760px;
   display: flex;
   align-items: center;
   padding: 90px 0;
@@ -207,35 +219,47 @@ a {
   justify-items: center;
 }
 
-.featured-card {
-  width: min(390px, 100%);
-  padding: 26px;
-  background: rgba(17, 16, 13, 0.86);
-  border: 1px solid rgba(164, 119, 52, 0.38);
-  border-radius: 24px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+.author-mark {
+  width: min(380px, 100%);
+  min-height: 380px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(211, 162, 76, 0.44);
+  background:
+    radial-gradient(circle at center, rgba(164,119,52,0.18), transparent 58%),
+    radial-gradient(circle at center, rgba(0,0,0,0.95), rgba(0,0,0,0.3) 68%, transparent 70%);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,0.62),
+    inset 0 0 70px rgba(164,119,52,0.08);
 }
 
-.featured-card h2 {
-  margin: 8px 0;
-  font-size: 2rem;
+.mark-circle {
+  width: 170px;
+  height: 170px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(211, 162, 76, 0.7);
+  background: rgba(0,0,0,0.58);
+  box-shadow: inset 0 0 40px rgba(164,119,52,0.18);
 }
 
-.featured-card p {
-  margin: 0;
-  color: var(--muted);
-}
-
-.text-link {
-  display: inline-block;
-  margin-top: 16px;
-  color: var(--gold-bright);
-  text-decoration: none;
-  font-weight: 700;
-}
-
-.text-link:hover {
+.mark-circle span {
   color: var(--cream);
+  font-size: 3rem;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+}
+
+.author-mark p {
+  max-width: 260px;
+  margin: 26px auto 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .small-label {
@@ -245,118 +269,6 @@ a {
   letter-spacing: 0.22em;
   font-size: 0.72rem;
   font-weight: 700;
-}
-
-.book-cover {
-  width: 280px;
-  min-height: 430px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 22px;
-  border: 1px solid rgba(211, 162, 76, 0.5);
-  background:
-    radial-gradient(circle at center 22%, rgba(211, 162, 76, 0.2), transparent 8rem),
-    linear-gradient(180deg, #20190f 0%, #080707 70%);
-  box-shadow:
-    0 26px 70px rgba(0,0,0,0.62),
-    inset 0 0 0 1px rgba(255,255,255,0.04);
-}
-
-.book-cover::before {
-  content: "";
-  position: absolute;
-  top: 58px;
-  left: 50%;
-  width: 150px;
-  height: 52px;
-  transform: translateX(-50%);
-  background: #050505;
-  border-radius: 50%;
-  box-shadow: 0 22px 34px rgba(0,0,0,0.75);
-}
-
-.book-cover::after {
-  content: "";
-  position: absolute;
-  top: 96px;
-  left: 50%;
-  width: 90px;
-  height: 185px;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.72);
-  border-radius: 50% 50% 44% 44%;
-  filter: blur(3px);
-}
-
-.featured-cover {
-  width: 330px;
-  min-height: 500px;
-  transform: rotate(-2deg);
-}
-
-.cover-two {
-  background:
-    radial-gradient(circle at center 24%, rgba(95, 42, 112, 0.34), transparent 8rem),
-    linear-gradient(180deg, #1a1220 0%, #080707 72%);
-}
-
-.cover-series {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 28px;
-  z-index: 3;
-  color: var(--muted);
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.65rem;
-}
-
-.cover-title {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 82px;
-  z-index: 3;
-  color: var(--cream);
-  text-align: center;
-  font-size: 2.25rem;
-  line-height: 1;
-  font-weight: 800;
-  text-shadow: 0 6px 20px rgba(0,0,0,0.9);
-}
-
-.featured-cover .cover-title {
-  font-size: 2.7rem;
-}
-
-.cover-author {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 34px;
-  z-index: 3;
-  color: var(--gold-bright);
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
-.quote-strip {
-  border-top: 1px solid rgba(164, 119, 52, 0.3);
-  border-bottom: 1px solid rgba(164, 119, 52, 0.3);
-  background: linear-gradient(90deg, rgba(24,7,6,0.78), rgba(17,16,13,0.94), rgba(24,7,6,0.78));
-  padding: 26px 0;
-}
-
-.quote-strip p {
-  margin: 0;
-  color: var(--cream);
-  text-align: center;
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
 }
 
 .section {
@@ -404,6 +316,94 @@ a {
   border: 1px solid rgba(164, 119, 52, 0.36);
   border-radius: 32px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.book-cover {
+  width: 280px;
+  min-height: 430px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(211, 162, 76, 0.5);
+  background:
+    radial-gradient(circle at center 22%, rgba(211, 162, 76, 0.2), transparent 8rem),
+    linear-gradient(180deg, #20190f 0%, #080707 70%);
+  box-shadow:
+    0 26px 70px rgba(0,0,0,0.62),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.book-cover::before {
+  content: "";
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  width: 150px;
+  height: 52px;
+  transform: translateX(-50%);
+  background: #050505;
+  border-radius: 50%;
+  box-shadow: 0 22px 34px rgba(0,0,0,0.75);
+}
+
+.book-cover::after {
+  content: "";
+  position: absolute;
+  top: 96px;
+  left: 50%;
+  width: 90px;
+  height: 185px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.72);
+  border-radius: 50% 50% 44% 44%;
+  filter: blur(3px);
+}
+
+.cover-two {
+  background:
+    radial-gradient(circle at center 24%, rgba(95, 42, 112, 0.34), transparent 8rem),
+    linear-gradient(180deg, #1a1220 0%, #080707 72%);
+}
+
+.cover-series {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 28px;
+  z-index: 3;
+  color: var(--muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.65rem;
+}
+
+.cover-title {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 82px;
+  z-index: 3;
+  color: var(--cream);
+  text-align: center;
+  font-size: 2.25rem;
+  line-height: 1;
+  font-weight: 800;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.9);
+}
+
+.cover-author {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 34px;
+  z-index: 3;
+  color: var(--gold-bright);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .book-info h3 {
@@ -600,8 +600,12 @@ a {
     width: min(100% - 28px, 1120px);
   }
 
-  .logo {
+  .logo-main {
     font-size: 1.1rem;
+  }
+
+  .logo-sub {
+    font-size: 0.58rem;
   }
 
   .nav a {
@@ -612,7 +616,20 @@ a {
     font-size: 3.25rem;
   }
 
-  .featured-cover,
+  .author-mark {
+    min-height: 300px;
+    padding: 24px;
+  }
+
+  .mark-circle {
+    width: 135px;
+    height: 135px;
+  }
+
+  .mark-circle span {
+    font-size: 2.2rem;
+  }
+
   .book-cover {
     width: 250px;
     min-height: 390px;
@@ -620,10 +637,6 @@ a {
 
   .cover-title {
     font-size: 2rem;
-  }
-
-  .featured-cover .cover-title {
-    font-size: 2.2rem;
   }
 
   .book-card,
