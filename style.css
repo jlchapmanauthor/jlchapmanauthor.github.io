@@ -872,3 +872,73 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .logo-sigil { animation: none; }
 }
+
+/* The Malfunctioning Carnival: visitor-initiated horror soundtrack */
+.soundtrack-control[hidden] { display: none !important; }
+.soundtrack-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 5px 9px 5px 5px;
+  border: 1px solid rgba(211, 162, 76, 0.42);
+  border-radius: 99px;
+  background: rgba(4, 4, 4, 0.50);
+}
+.soundtrack-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: #e0c99e;
+  font: 600 0.73rem Georgia, "Times New Roman", serif;
+  letter-spacing: .045em;
+  cursor: pointer;
+}
+.soundtrack-toggle:hover,
+.soundtrack-toggle:focus-visible,
+.soundtrack-toggle.is-playing {
+  color: #f4e7d0;
+  background: rgba(117, 32, 26, 0.35);
+}
+.soundtrack-toggle:focus-visible,
+.soundtrack-volume:focus-visible {
+  outline: 2px solid #d3a24c;
+  outline-offset: 2px;
+}
+.soundtrack-icon {
+  color: #d8a44b;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.soundtrack-toggle.is-playing .soundtrack-icon {
+  color: #e37b68;
+  text-shadow: 0 0 10px rgba(224, 56, 43, 0.9);
+}
+.soundtrack-volume-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.soundtrack-volume {
+  width: 65px;
+  height: 16px;
+  accent-color: #b56a45;
+  cursor: pointer;
+}
+@media (max-width: 620px) {
+  .soundtrack-control { padding: 3px 7px 3px 3px; }
+  .soundtrack-toggle { padding: 4px 5px; }
+  .soundtrack-label { display: none; }
+  .soundtrack-volume { width: 54px; }
+}
