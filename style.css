@@ -857,3 +857,18 @@ a {
   .logo-sigil { width: 44px; height: 47px; }
   .nav { column-gap: 12px; row-gap: 8px; }
 }
+
+/* The animated author sigil: quick double beat followed by a quiet pause. */
+.logo-sigil {
+  transform-origin: 50% 50%;
+  animation: sigil-heartbeat 860ms ease-in-out infinite;
+}
+@keyframes sigil-heartbeat {
+  0%, 23%, 66%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(146, 43, 32, .22)); }
+  30%, 36% { transform: scale(1.10); filter: drop-shadow(0 0 9px rgba(230, 40, 34, .75)); }
+  42% { transform: scale(1.01); filter: drop-shadow(0 0 5px rgba(146, 43, 32, .30)); }
+  49%, 55% { transform: scale(1.07); filter: drop-shadow(0 0 8px rgba(230, 40, 34, .64)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-sigil { animation: none; }
+}
