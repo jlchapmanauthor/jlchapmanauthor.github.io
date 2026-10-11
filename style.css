@@ -61,7 +61,7 @@ a {
   z-index: 50;
   background:
     linear-gradient(90deg, rgba(5,5,5,0.78), rgba(16,8,7,0.64), rgba(5,5,5,0.78)),
-    url("jlc-header-texture.jpg") center / 192px 96px repeat;
+    url("jlc-header-texture-fixed.jpg") center / 192px 96px repeat;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(164, 119, 52, 0.35);
 }
@@ -80,10 +80,15 @@ a {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  min-width: 0;
 }
 .logo-text {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 2px;
+  white-space: nowrap;
+  min-width: 0;
 }
 .logo-sigil {
   width: 64px;
@@ -91,6 +96,7 @@ a {
   object-fit: contain;
   display: block;
   flex-shrink: 0;
+  border: 0;
   mix-blend-mode: screen;
   filter: drop-shadow(0 0 7px rgba(164, 68, 43, 0.25));
 }
@@ -820,4 +826,25 @@ a {
 @media (max-width: 620px) {
   .logo-block { gap: 9px; }
   .logo-sigil { width: 52px; height: 56px; }
+}
+
+/* Header stability at desktop zoom and intermediate screen widths */
+@media (max-width: 1160px) {
+  .header-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 12px 0;
+    gap: 12px 24px;
+  }
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 16px;
+  }
+}
+@media (max-width: 620px) {
+  .logo-main { font-size: 1.05rem; letter-spacing: .12em; }
+  .logo-sub { font-size: .55rem; letter-spacing: .17em; }
+  .logo-sigil { width: 44px; height: 47px; }
+  .nav { column-gap: 12px; row-gap: 8px; }
 }
