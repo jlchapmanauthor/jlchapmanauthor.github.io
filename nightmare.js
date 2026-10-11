@@ -191,28 +191,40 @@
     lastPressingFace = chosenFace;
     const faceClass = chosenFace === 'original'
       ? 'nm-photo nm-face-real nm-photo--face'
-      : 'nm-face-real nm-new-face nm-new-face--' + chosenFace;
+      : 'nm-photo nm-face-real nm-new-face nm-new-face--' + chosenFace;
     const face = make('div', faceClass);
     const membrane = make('div', 'nm-face-membrane');
-    const x = random(innerWidth * .30, innerWidth * .70);
-    const y = random(innerHeight * .29, innerHeight * .62);
+    // Anchor the face to the visual viewport, not the start of the document.
+    // On narrow screens keep it centered so the entire expression stays visible.
+    const viewport = layer.getBoundingClientRect();
+    const narrow = viewport.width <= 640 || viewport.height <= 500;
+    const x = narrow ? viewport.width * .5 : random(viewport.width * .30, viewport.width * .70);
+    const y = narrow ? viewport.height * .52 : random(viewport.height * .29, viewport.height * .62);
     face.style.left = membrane.style.left = x + 'px';
     face.style.top = membrane.style.top = y + 'px';
-    animate(face, [
-      { offset: 0, transform: 'translate(-50%, -50%) scale(.58)', opacity: 0, filter: 'blur(15px)' },
-      { offset: .35, transform: 'translate(-50%, -50%) scale(.92)', opacity: .62, filter: 'blur(4px)' },
-      { offset: .71, transform: 'translate(-50%, -50%) scale(1.18)', opacity: 1, filter: 'blur(0)' },
-      { offset: .91, transform: 'translate(-50%, -50%) scale(1.21)', opacity: .96, filter: 'blur(0)' },
-      { offset: 1, transform: 'translate(-50%, -50%) scale(1.11)', opacity: 0, filter: 'blur(4px)' }
-    ], { duration: 4400 });
+    // On phones the old long blur and side-cropping hid most of the face.
+    const faceFrames = narrow ? [
+      { offset: 0, transform: 'translate(-50%, -50%) scale(.78)', opacity: 0, filter: 'blur(9px) brightness(.95)' },
+      { offset: .20, transform: 'translate(-50%, -50%) scale(.94)', opacity: .88, filter: 'blur(2px) brightness(1.08)' },
+      { offset: .45, transform: 'translate(-50%, -50%) scale(1.05)', opacity: 1, filter: 'blur(0) brightness(1.12)' },
+      { offset: .82, transform: 'translate(-50%, -50%) scale(1.10)', opacity: 1, filter: 'blur(0) brightness(1.12)' },
+      { offset: 1, transform: 'translate(-50%, -50%) scale(1.08)', opacity: 0, filter: 'blur(3px)' }
+    ] : [
+      { offset: 0, transform: 'translate(-50%, -50%) scale(.68)', opacity: 0, filter: 'blur(10px)' },
+      { offset: .30, transform: 'translate(-50%, -50%) scale(.94)', opacity: .84, filter: 'blur(3px)' },
+      { offset: .62, transform: 'translate(-50%, -50%) scale(1.13)', opacity: 1, filter: 'blur(0) brightness(1.08)' },
+      { offset: .87, transform: 'translate(-50%, -50%) scale(1.16)', opacity: 1, filter: 'blur(0) brightness(1.08)' },
+      { offset: 1, transform: 'translate(-50%, -50%) scale(1.10)', opacity: 0, filter: 'blur(3px)' }
+    ];
+    animate(face, faceFrames, { duration: 5100 });
     animate(membrane, [
       { offset: 0, opacity: 0, transform: 'translate(-50%, -50%) scale(.35)' },
       { offset: .65, opacity: .9, transform: 'translate(-50%, -50%) scale(1)' },
       { offset: 1, opacity: 0, transform: 'translate(-50%, -50%) scale(1.25)' }
-    ], { duration: 4500 });
-    after(2100, () => bendNearby(x, y, 9));
-    after(3450, () => bendNearby(x, y, 15));
-    stopEvent(4600);
+    ], { duration: 5100 });
+    after(1900, () => bendNearby(x, y, 9));
+    after(3650, () => bendNearby(x, y, 15));
+    stopEvent(5300);
   }
 
   function cursorShape() {
@@ -314,6 +326,9 @@
     clean();
     enabled = Boolean(nextValue) && !motion.matches;
     if (enabled) {
+      // Warm the small artwork files after opt-in, before the first scare.
+      const preload = new Image();
+      preload.src = 'nightmare-pressing-faces-atlas.webp';
       activatedAt = now();
       lastCursorAt = 0;
       shown = 0;
