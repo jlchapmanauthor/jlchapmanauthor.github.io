@@ -10,7 +10,6 @@
   const coarse = window.matchMedia('(pointer: coarse)');
   const random = (min, max) => min + Math.random() * (max - min);
   const pick = list => list[Math.floor(Math.random() * list.length)];
-  const oneOf = (value, values) => values.includes(value);
   const nightmares = [
     { css: 'clown', name: 'THE_CARNIVAL.jpg' },
     { css: 'glass', name: 'THE_OTHER_SIDE.jpg' },
@@ -31,7 +30,6 @@
   let shown = 0;
   let activatedAt = 0;
   let lastPointer = null;
-  let focusedBeforeScare = null;
   let touched = new Set();
 
   const now = () => Date.now();
@@ -71,7 +69,7 @@
   function blocked() {
     if (document.hidden || motion.matches) return true;
     const el = document.activeElement;
-    return Boolean(el && el.matches && el.matches('input, select, textarea, [contenteditable], [role="textbox"]'));
+    return Boolean(el && el.matches && el.matches('input:not([type="range"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]), select, textarea, [contenteditable="true"], [role="textbox"]'));
   }
   function schedule(first = false) {
     if (!enabled || blocked()) return;
