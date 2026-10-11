@@ -8,7 +8,7 @@
 
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
-  <link rel="stylesheet" href="style.css?v=wink-and-glitch-20261011" />
+  <link rel="stylesheet" href="style.css?v=decayed-hover-20261011" />
   <link rel="stylesheet" href="nightmare.css?v=wink-and-glitch-20261011" />
 </head>
 
@@ -89,12 +89,16 @@
         </div>
 
         <div class="hero-feature">
-          <div class="hero-wink-frame" id="author-wink-frame" tabindex="0"
-               title="Hover over the portrait for a surprise">
-            <img class="hero-image" id="author-portrait"
-                 src="author-horror.jpg.jpg" alt="J.L. Chapman's gothic horror author portrait">
-            <canvas class="hero-wink-canvas" id="author-wink-canvas" aria-hidden="true"></canvas>
-          </div>
+          <button class="hero-hover-frame" type="button"
+                  aria-label="Reveal the decayed horror portrait"
+                  title="Hover, tap, or focus to reveal the nightmare">
+            <img class="hero-image hero-image-base"
+                 src="author-horror.jpg.jpg"
+                 alt="J.L. Chapman's gothic horror author portrait">
+            <img class="hero-image hero-image-decayed"
+                 src="author-horror-decayed.webp"
+                 alt="" aria-hidden="true" decoding="async">
+          </button>
         </div>
 
       </div>
@@ -360,6 +364,5 @@
     })();
   </script>
   <script src="nightmare.js?v=wink-and-glitch-20261011" defer></script>
-  <script src="portrait-wink.js?v=wink-and-glitch-20261011" defer></script>
 </body>
                 </html>
