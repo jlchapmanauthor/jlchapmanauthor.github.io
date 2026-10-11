@@ -37,6 +37,7 @@
   let currentKind = '';
   let lastKind = '';
   let lastCursorAt = 0;
+  let lastDollAt = 0;
   let shown = 0;
   let activatedAt = 0;
   let lastPointer = null;
@@ -231,6 +232,106 @@
     return '<svg width="24" height="32" viewBox="0 0 24 32" aria-hidden="true" focusable="false">' +
       '<path d="M3 2 L3 25 L9 19 L13 29 L17 27 L13 17 L22 17Z" fill="#fff4e7" stroke="#090808" stroke-width="2" stroke-linejoin="round"/></svg>';
   }
+  function showNightmareArchive() {
+    const chosen = pick(nightmares);
+    const overlay = make('div', 'nm-archive-overlay');
+    const windowFrame = make('div', 'nm-archive-window', overlay);
+    const bar = make('div', 'nm-archive-title', windowFrame);
+    bar.textContent = 'NIGHTMARE ARCHIVE  /  ' + chosen.name;
+    make('div', 'nm-photo nm-popup-photo nm-photo--' + chosen.css, windowFrame);
+    const footer = make('div', 'nm-archive-footer', windowFrame);
+    footer.textContent = 'CONNECTION LOST';
+    overlay.classList.add('nm-archive-open');
+  }
+
+  /* Long haunted-doll variation of the fake file and cursor event.
+     No actual mouse movement, file access, click, or window interaction. */
+  function cursedDoll() {
+    const rect = layer.getBoundingClientRect();
+    const vw = rect.width;
+    const vh = rect.height;
+    const isSmall = vw <= 640 || vh <= 500;
+    const width = isSmall ? Math.min(218, Math.max(140, vw * .54))
+                          : Math.min(325, Math.max(194, vw * .25));
+    const height = width * (1448 / 1086);
+    // The file appears in the center before anything starts moving.
+    const fileX = vw * .5;
+    const fileY = vh * .50;
+    const fakeFile = make('div', 'nm-cursed-file nm-doll-file');
+    fakeFile.innerHTML = '<span class="nm-cursed-file-symbol" aria-hidden="true">▣</span><span>DON_T_OPEN.jpg</span>';
+    fakeFile.style.left = fileX + 'px';
+    fakeFile.style.top = fileY + 'px';
+    fakeFile.classList.add('nm-file-visible');
+
+    const doll = make('div', 'nm-doll-walker');
+    doll.style.width = width + 'px';
+    doll.style.height = height + 'px';
+    const body = make('div', 'nm-doll-body', doll);
+
+    const startX = -width - 30;
+    const pauseX = fileX - width * (isSmall ? 1.12 : 1.25);
+    const endX = fileX - width * .83;
+    const endY = fileY - height * .43;
+    const startY = endY + (isSmall ? 33 : 44);
+    // Crawl in from the LEFT, with uneven, stop-start steps.
+    const positions = [
+      { offset: 0, transform: 'translate3d(' + startX + 'px,' + (startY + 7) + 'px,0)', opacity: 0 },
+      { offset: .08, transform: 'translate3d(' + (startX + 25) + 'px,' + startY + 'px,0)', opacity: 1 },
+      { offset: .24, transform: 'translate3d(' + (pauseX - 45) + 'px,' + (startY - 8) + 'px,0)', opacity: 1 },
+      { offset: .36, transform: 'translate3d(' + pauseX + 'px,' + startY + 'px,0)', opacity: 1 },
+      { offset: .57, transform: 'translate3d(' + pauseX + 'px,' + startY + 'px,0)', opacity: 1 },
+      { offset: .78, transform: 'translate3d(' + endX + 'px,' + endY + 'px,0)', opacity: 1 },
+      { offset: .90, transform: 'translate3d(' + endX + 'px,' + endY + 'px,0)', opacity: 1 },
+      { offset: 1, transform: 'translate3d(' + endX + 'px,' + (endY + 18) + 'px,0)', opacity: 0 }
+    ];
+    animate(doll, positions, { duration: 14300, easing: 'linear' });
+    animate(body, [
+      { offset: 0, transform: 'rotate(-3deg) translateY(0)' },
+      { offset: .12, transform: 'rotate(3deg) translateY(-7px)' },
+      { offset: .23, transform: 'rotate(-4deg) translateY(2px)' },
+      { offset: .36, transform: 'rotate(2deg) translateY(-6px)' },
+      { offset: .46, transform: 'rotate(-2deg) translateY(0)' },
+      { offset: .57, transform: 'rotate(-2deg) translateY(0)' },
+      { offset: .71, transform: 'rotate(4deg) translateY(-9px)' },
+      { offset: .81, transform: 'rotate(-2deg) translateY(0)' },
+      { offset: .92, transform: 'rotate(0deg) translateY(0)' },
+      { offset: 1, transform: 'rotate(-3deg) translateY(7px)' }
+    ], { duration: 14300, easing: 'ease-in-out' });
+
+    // The doll captures a simulated cursor, while the actual pointer stays free.
+    const ghostCursor = make('div', 'nm-phantom-cursor nm-doll-cursor');
+    ghostCursor.innerHTML = cursorShape();
+    const clamped = (v, low, high) => Math.min(high, Math.max(low, v));
+    const originalPointer = lastPointer && !coarse.matches
+      ? { x: clamped(lastPointer.x, 15, vw - 24), y: clamped(lastPointer.y, 15, vh - 35) }
+      : { x: vw * .65, y: vh * .62 };
+    const handX = pauseX + width * .86;
+    const handY = startY + height * .41;
+    // Cursor becomes visible only once the doll has wandered partway in.
+    after(4350, () => {
+      animate(ghostCursor, [
+        { offset: 0, opacity: 0, transform: 'translate(' + originalPointer.x + 'px,' + originalPointer.y + 'px) scale(.65)' },
+        { offset: .12, opacity: 1, transform: 'translate(' + originalPointer.x + 'px,' + originalPointer.y + 'px) scale(1)' },
+        { offset: 1, opacity: 1, transform: 'translate(' + handX + 'px,' + handY + 'px) scale(1)' }
+      ], { duration: 1700 });
+    });
+    after(6240, () => {
+      animate(ghostCursor, [
+        { offset: 0, opacity: 1, transform: 'translate(' + handX + 'px,' + handY + 'px)' },
+        { offset: .5, opacity: 1, transform: 'translate(' + ((handX + fileX) / 2) + 'px,' + ((handY + fileY) / 2) + 'px)' },
+        { offset: 1, opacity: 1, transform: 'translate(' + fileX + 'px,' + fileY + 'px)' }
+      ], { duration: 3100, easing: 'ease-in-out' });
+    });
+    after(9520, () => {
+      fakeFile.classList.add('nm-file-clicked');
+      const clickRing = make('div', 'nm-doll-click-ring');
+      clickRing.style.left = fileX + 'px';
+      clickRing.style.top = fileY + 'px';
+    });
+    after(10050, showNightmareArchive);
+    stopEvent(14350);
+  }
+
   function cursedCursor() {
     if (coarse.matches && !lastPointer) {
       lastPointer = { x: innerWidth * .44, y: innerHeight * .44 };
@@ -279,15 +380,7 @@
     });
     after(3250, () => {
       fakeFile.classList.add('nm-file-clicked');
-      const chosen = pick(nightmares);
-      const overlay = make('div', 'nm-archive-overlay');
-      const windowFrame = make('div', 'nm-archive-window', overlay);
-      const bar = make('div', 'nm-archive-title', windowFrame);
-      bar.textContent = 'NIGHTMARE ARCHIVE  /  ' + chosen.name;
-      const photo = make('div', 'nm-photo nm-popup-photo nm-photo--' + chosen.css, windowFrame);
-      const footer = make('div', 'nm-archive-footer', windowFrame);
-      footer.textContent = 'CONNECTION LOST';
-      overlay.classList.add('nm-archive-open');
+      showNightmareArchive();
     });
     stopEvent(6150);
   }
@@ -296,9 +389,11 @@
     const sinceStart = now() - activatedAt;
     const cursorAllowed = shown >= 3 && sinceStart > 85000 &&
       (lastCursorAt === 0 || now() - lastCursorAt > 155000);
-    const kinds = cursorAllowed
-      ? ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face', 'cursor']
-      : ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face'];
+    const dollAllowed = shown >= 1 && sinceStart > 38000 &&
+      (lastDollAt === 0 || now() - lastDollAt > 175000);
+    const kinds = ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face'];
+    if (cursorAllowed) kinds.push('cursor');
+    if (dollAllowed) kinds.push('doll', 'doll');
     let kind = pick(kinds);
     if (kind === lastKind) kind = pick(kinds.filter(k => k !== lastKind));
     return kind;
@@ -311,6 +406,7 @@
     lastKind = kind;
     shown++;
     if (kind === 'cursor') { lastCursorAt = now(); cursedCursor(); }
+    else if (kind === 'doll') { lastDollAt = now(); cursedDoll(); }
     else if (kind === 'watcher') watcher();
     else if (kind === 'glitch') glitchMessage();
     else pressedFace();
@@ -329,8 +425,11 @@
       // Warm the small artwork files after opt-in, before the first scare.
       const preload = new Image();
       preload.src = 'nightmare-pressing-faces-atlas.webp';
+      const dollPreload = new Image();
+      dollPreload.src = 'nightmare-doll.webp';
       activatedAt = now();
       lastCursorAt = 0;
+      lastDollAt = 0;
       shown = 0;
       lastKind = '';
       schedule(true);
@@ -342,7 +441,7 @@
     toggle.disabled = motion.matches;
     toggle.title = motion.matches
       ? 'Nightmare Mode is disabled while reduced motion is enabled'
-      : 'Optional visual scares including pressing faces, glitch messages, and fake cursors. Press Escape to exit.';
+      : 'Optional visual scares including pressing faces, glitch messages, fake cursors and a haunted doll. Press Escape to exit.';
   }
 
   window.addEventListener('pointermove', event => {
