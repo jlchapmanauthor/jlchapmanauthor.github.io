@@ -47,7 +47,7 @@
     </div>
   </header>
 
-  <audio id="site-soundtrack" src="the-malfunctioning-carnival.mp3"
+  <audio id="site-soundtrack" src="The%20Malfunctioning%20Carnival%20(Remastered).m4a"
          loop preload="none" aria-hidden="true"></audio>
 
   <main>
@@ -325,7 +325,7 @@
         control.hidden = true;
       });
 
-      // Avoid a dead play button until the audio has been added to the repository.
+      // Avoid a dead play button unless its audio file is available on the site.
       fetch(audio.getAttribute('src'), { method: 'HEAD', cache: 'no-store' })
         .then(response => {
           if (response.ok && (response.headers.get('content-type') || '').indexOf('text/html') === -1) {
