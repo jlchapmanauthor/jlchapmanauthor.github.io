@@ -17,6 +17,13 @@
     { css: 'ward', name: 'PATIENT_UNKNOWN.jpg' },
     { css: 'faceless', name: 'DO_NOT_OPEN.jpg' }
   ];
+  const creepyMessages = [
+    "It's 10pm, do you know where your kids are?",
+    "I see you.",
+    "Don't turn around.",
+    "You were not alone here.",
+    "It knows your name."
+  ];
   const pressureTargets = '.hero-copy, .hero-feature, .book-card, .work-card, .section-heading, .about-card, .representation-feature, .reader-signup-box, .contact-section p, .contact-section h2';
 
   let enabled = false;
@@ -30,6 +37,7 @@
   let shown = 0;
   let activatedAt = 0;
   let lastPointer = null;
+  let lastMessage = '';
   let touched = new Set();
 
   const now = () => Date.now();
@@ -129,34 +137,49 @@
     stopEvent(5650);
   }
 
-  function claw() {
-    const node = make('div', 'nm-photo nm-hand-real nm-photo--hand');
-    const lens = make('div', 'nm-pressure-lens nm-pressure-claw');
-    const x = random(innerWidth * .21, innerWidth * .78);
-    const height = Math.min(innerHeight * .55, 490);
-    const start = -height * .9;
-    const end = innerHeight + 50;
-    node.style.left = x + 'px';
-    const duration = 5800;
-    const startTime = performance.now();
-    let previousUpdate = -9999;
-    const frame = time => {
-      if (!enabled || currentKind !== 'claw') return;
-      const p = Math.min(1, (time - startTime) / duration);
-      const y = start + (end - start) * p;
-      node.style.transform = 'translate(-50%, ' + (y - height * .18).toFixed(1) + 'px)';
-      node.style.opacity = p < .07 ? String(p / .07) : p > .9 ? String((1 - p) / .1) : '.95';
-      const contactY = y + height * .49;
-      lens.style.transform = 'translate(-50%, -50%)';
-      lens.style.left = x + 'px';
-      lens.style.top = contactY + 'px';
-      lens.style.opacity = p < .12 || p > .89 ? '0' : '.85';
-      if (time - previousUpdate > 95) { bendNearby(x, contactY, 10); previousUpdate = time; }
-      if (p < 1) raf = requestAnimationFrame(frame);
-      else raf = null;
-    };
-    raf = requestAnimationFrame(frame);
-    stopEvent(duration + 180);
+  // A short interference effect types a haunted message, without flashing.
+  function glitchMessage() {
+    const choices = creepyMessages.filter(message => message !== lastMessage);
+    const message = pick(choices.length ? choices : creepyMessages);
+    lastMessage = message;
+
+    const overlay = make('div', 'nm-glitch-screen');
+    const scan = make('div', 'nm-glitch-scan', overlay);
+    const box = make('div', 'nm-glitch-box', overlay);
+    const label = make('div', 'nm-glitch-label', box);
+    const text = make('div', 'nm-glitch-text', box);
+    label.textContent = 'SIGNAL INTERRUPTED';
+    text.textContent = '';
+
+    animate(overlay, [
+      { offset: 0, opacity: 0 },
+      { offset: .10, opacity: 1 },
+      { offset: .83, opacity: 1 },
+      { offset: 1, opacity: 0 }
+    ], { duration: 6250 });
+    animate(box, [
+      { offset: 0, opacity: 0, transform: 'translateY(9px) scale(.98)' },
+      { offset: .14, opacity: 1, transform: 'translateY(0) scale(1)' },
+      { offset: .83, opacity: 1, transform: 'translateY(0) scale(1)' },
+      { offset: 1, opacity: 0, transform: 'translateY(-6px) scale(.99)' }
+    ], { duration: 6200 });
+    animate(scan, [
+      { offset: 0, opacity: 0, transform: 'translateY(-12vh)' },
+      { offset: .15, opacity: .30, transform: 'translateY(12vh)' },
+      { offset: .85, opacity: .13, transform: 'translateY(72vh)' },
+      { offset: 1, opacity: 0, transform: 'translateY(110vh)' }
+    ], { duration: 6150 });
+
+    let index = 0;
+    function typeNext() {
+      if (!enabled || currentKind !== 'glitch') return;
+      if (index < message.length) {
+        text.textContent += message.charAt(index++);
+        after(random(39, 62), typeNext);
+      }
+    }
+    after(570, typeNext);
+    stopEvent(6500);
   }
 
   function pressedFace() {
@@ -253,8 +276,8 @@
     const cursorAllowed = shown >= 3 && sinceStart > 85000 &&
       (lastCursorAt === 0 || now() - lastCursorAt > 155000);
     const kinds = cursorAllowed
-      ? ['watcher', 'watcher', 'claw', 'claw', 'face', 'face', 'cursor']
-      : ['watcher', 'watcher', 'claw', 'claw', 'face', 'face'];
+      ? ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face', 'cursor']
+      : ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face'];
     let kind = pick(kinds);
     if (kind === lastKind) kind = pick(kinds.filter(k => k !== lastKind));
     return kind;
@@ -268,7 +291,7 @@
     shown++;
     if (kind === 'cursor') { lastCursorAt = now(); cursedCursor(); }
     else if (kind === 'watcher') watcher();
-    else if (kind === 'claw') claw();
+    else if (kind === 'glitch') glitchMessage();
     else pressedFace();
   }
 

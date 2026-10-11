@@ -8,8 +8,8 @@
 
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
-  <link rel="stylesheet" href="style.css?v=industrial-soundtrack-20261010" />
-  <link rel="stylesheet" href="nightmare.css?v=real-nightmare-20261011" />
+  <link rel="stylesheet" href="style.css?v=wink-and-glitch-20261011" />
+  <link rel="stylesheet" href="nightmare.css?v=wink-and-glitch-20261011" />
 </head>
 
 <body>
@@ -48,14 +48,15 @@
 
       <button type="button" class="nm-toggle" id="nightmare-toggle"
               aria-pressed="false" aria-describedby="nightmare-description"
-              title="Optional realistic Nightmare Mode scares including false cursors, crawling hands, and faces pressing through the page">
+              title="Optional realistic Nightmare Mode scares including glitch messages, false cursors, and faces pressing through the page">
         <span class="nm-toggle__symbol" aria-hidden="true">◉</span>
         <span>Nightmare</span>
         <span class="nm-toggle__state" id="nightmare-state" aria-hidden="true">Off</span>
       </button>
       <span class="nm-sr-only" id="nightmare-description">
-        Enable optional realistic horror apparitions: a Watcher peeks out, a clawed hand and a face press on the page,
-        and fake cursors briefly open a fictional horror image. No sudden audio, no real files accessed.
+        Enable optional horror apparitions: a Watcher peeks out, unsettling messages type through simulated
+        screen interference, a face presses on the page, and fake cursors briefly open a fictional horror image.
+        No sudden audio, no real files accessed.
         Press Escape or this button again to turn off. Nightmare Mode is unavailable with reduced motion enabled.
       </span>
     </div>
@@ -88,7 +89,12 @@
         </div>
 
         <div class="hero-feature">
-          <img class="hero-image" src="author-horror.jpg.jpg" alt="Dark horror artwork for J.L. Chapman">
+          <div class="hero-wink-frame" id="author-wink-frame" tabindex="0"
+               title="Hover over the portrait for a surprise">
+            <img class="hero-image" id="author-portrait"
+                 src="author-horror.jpg.jpg" alt="J.L. Chapman's gothic horror author portrait">
+            <canvas class="hero-wink-canvas" id="author-wink-canvas" aria-hidden="true"></canvas>
+          </div>
         </div>
 
       </div>
@@ -353,6 +359,7 @@
         .catch(() => {});
     })();
   </script>
-  <script src="nightmare.js?v=real-nightmare-20261011" defer></script>
+  <script src="nightmare.js?v=wink-and-glitch-20261011" defer></script>
+  <script src="portrait-wink.js?v=wink-and-glitch-20261011" defer></script>
 </body>
                 </html>
