@@ -944,40 +944,61 @@ a {
 }
 
 
-/* Homepage author portrait: an actual eye-close on hover, generated on a
-   transparent canvas over the unchanged original photograph. */
-.hero-wink-frame {
+/* Homepage author portrait: natural -> haunted crossfade. No JavaScript required. */
+.hero-hover-frame {
   position: relative;
   display: block;
   flex: 0 1 300px;
   width: min(300px, 100%);
   height: 400px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: #050505;
+  border: 1px solid rgba(211, 162, 76, 0.46);
   border-radius: 26px;
+  overflow: hidden;
   isolation: isolate;
+  box-shadow: 0 26px 70px rgba(0,0,0,.7), 0 0 50px rgba(164,119,52,.12);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.hero-wink-frame .hero-image {
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-wink-canvas {
+.hero-hover-frame .hero-image {
   position: absolute;
-  z-index: 1;
   inset: 0;
   display: block;
   width: 100%;
+  max-width: none;
   height: 100%;
-  border-radius: 26px;
-  opacity: 0;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  box-shadow: none;
   pointer-events: none;
-  transition: opacity .09s ease-in-out;
+  transition: opacity .42s ease-in-out, transform .65s ease-out;
 }
-.hero-wink-frame.is-winking .hero-wink-canvas { opacity: 1; }
-.hero-wink-frame:focus-visible {
-  outline: 2px solid #d3a24c;
+.hero-hover-frame .hero-image-base {
+  z-index: 1;
+  opacity: 1;
+}
+.hero-hover-frame .hero-image-decayed {
+  z-index: 2;
+  opacity: 0;
+  transform: scale(1.04);
+}
+.hero-hover-frame:is(:hover, :focus, :focus-visible) .hero-image-base {
+  opacity: 0;
+}
+.hero-hover-frame:is(:hover, :focus, :focus-visible) .hero-image-decayed {
+  opacity: 1;
+  transform: scale(1);
+}
+.hero-hover-frame:focus-visible {
+  outline: 3px solid #d3a24c;
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-wink-canvas { transition: none; }
+  .hero-hover-frame .hero-image { transition: none; }
 }
