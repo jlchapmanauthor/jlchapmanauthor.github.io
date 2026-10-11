@@ -8,8 +8,8 @@
 
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
-  <link rel="stylesheet" href="style.css?v=navigation-labels-20261010" />
-  <link rel="stylesheet" href="nightmare.css?v=wink-and-glitch-20261011" />
+  <link rel="stylesheet" href="style.css?v=clean-header-20261011" />
+  <link rel="stylesheet" href="nightmare.css?v=more-pressing-faces-20261011" />
 </head>
 
 <body>
@@ -24,22 +24,14 @@
         </span>
       </a>
 
-      <nav class="nav">
-        <a href="#books">Bookstore</a>
-        <a href="#updates">Books in Development</a>
-        <a href="#representation">Books Seeking Representation</a>
-        <a href="#about">About</a>
-        <a href="#readers">Readers</a>
-        <a href="#contact">Contact</a>
-      </nav>
-
-      <!-- Audio stays opt-in and the control is hidden until the file is uploaded. -->
+      <div class="header-actions" aria-label="Site atmosphere controls">
+      <!-- Soundtrack plays only after the visitor enables it. -->
       <div class="soundtrack-control" id="soundtrack-control" hidden>
         <button type="button" class="soundtrack-toggle" id="soundtrack-toggle"
                 aria-label="Play the horror soundtrack" aria-pressed="false"
                 title="Play The Malfunctioning Carnival">
           <span class="soundtrack-icon" aria-hidden="true">♫</span>
-          <span class="soundtrack-label">Music</span>
+          <span class="soundtrack-label">Turn on music</span>
         </button>
         <label class="soundtrack-volume-label" for="soundtrack-volume">Volume</label>
         <input id="soundtrack-volume" class="soundtrack-volume" type="range"
@@ -50,8 +42,7 @@
               aria-pressed="false" aria-describedby="nightmare-description"
               title="Optional realistic Nightmare Mode scares including glitch messages, false cursors, and faces pressing through the page">
         <span class="nm-toggle__symbol" aria-hidden="true">◉</span>
-        <span>Nightmare</span>
-        <span class="nm-toggle__state" id="nightmare-state" aria-hidden="true">Off</span>
+        <span class="nm-toggle__label" id="nightmare-state">Turn on nightmare mode</span>
       </button>
       <span class="nm-sr-only" id="nightmare-description">
         Enable optional horror apparitions: a Watcher peeks out, unsettling messages type through simulated
@@ -59,6 +50,16 @@
         No sudden audio, no real files accessed.
         Press Escape or this button again to turn off. Nightmare Mode is unavailable with reduced motion enabled.
       </span>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#books">Bookstore</a>
+        <a href="#updates">Books in Development</a>
+        <a href="#representation">Books Seeking Representation</a>
+        <a href="#about">About</a>
+        <a href="#readers">Readers</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
@@ -322,6 +323,8 @@
 
       function updateButton() {
         const playing = !audio.paused && !audio.ended;
+        toggle.querySelector('.soundtrack-label').textContent =
+          playing ? 'Turn off music' : 'Turn on music';
         toggle.setAttribute('aria-pressed', String(playing));
         toggle.setAttribute('aria-label', playing ? 'Pause the horror soundtrack' : 'Play the horror soundtrack');
         toggle.setAttribute('title', playing ? 'Pause The Malfunctioning Carnival' : 'Play The Malfunctioning Carnival');
@@ -363,6 +366,6 @@
         .catch(() => {});
     })();
   </script>
-  <script src="nightmare.js?v=wink-and-glitch-20261011" defer></script>
+  <script src="nightmare.js?v=more-pressing-faces-20261011" defer></script>
 </body>
                 </html>

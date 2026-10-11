@@ -363,3 +363,17 @@
   .nm-glitch-label { font-size: .61rem; letter-spacing: .13em; }
   .nm-glitch-text { min-height: 5em; font-size: clamp(1.22rem, 5vw, 1.75rem); }
 }
+
+
+/* Four additional photorealistic pressing faces in one optimized WebP sheet. */
+.nm-new-face {
+  aspect-ratio: 272 / 352;
+  background-image: url("nightmare-pressing-faces-atlas.webp");
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+}
+.nm-new-face--spider { background-position: 0% 0%; }
+.nm-new-face--grinning { background-position: 100% 0%; }
+.nm-new-face--stretched { background-position: 0% 100%; }
+.nm-new-face--porcelain { background-position: 100% 100%; }
+.nm-toggle__label { display: inline; text-transform: none; }

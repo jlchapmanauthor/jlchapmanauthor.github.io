@@ -24,6 +24,9 @@
     "You were not alone here.",
     "It knows your name."
   ];
+  // The original pressing face plus four new realistic variations.
+  const pressingFaces = ['original', 'spider', 'grinning', 'stretched', 'porcelain'];
+  let lastPressingFace = null;
   const pressureTargets = '.hero-copy, .hero-feature, .book-card, .work-card, .section-heading, .about-card, .representation-feature, .reader-signup-box, .contact-section p, .contact-section h2';
 
   let enabled = false;
@@ -183,7 +186,13 @@
   }
 
   function pressedFace() {
-    const face = make('div', 'nm-photo nm-face-real nm-photo--face');
+    const choices = pressingFaces.filter(name => name !== lastPressingFace);
+    const chosenFace = pick(choices);
+    lastPressingFace = chosenFace;
+    const faceClass = chosenFace === 'original'
+      ? 'nm-photo nm-face-real nm-photo--face'
+      : 'nm-face-real nm-new-face nm-new-face--' + chosenFace;
+    const face = make('div', faceClass);
     const membrane = make('div', 'nm-face-membrane');
     const x = random(innerWidth * .30, innerWidth * .70);
     const y = random(innerHeight * .29, innerHeight * .62);
@@ -299,7 +308,7 @@
     toggle.setAttribute('aria-pressed', String(enabled));
     toggle.setAttribute('aria-label', enabled ? 'Turn off Nightmare Mode' : 'Turn on Nightmare Mode with visual jump scares');
     toggle.classList.toggle('is-active', enabled);
-    state.textContent = enabled ? 'On' : 'Off';
+    state.textContent = enabled ? 'Turn off nightmare mode' : 'Turn on nightmare mode';
   }
   function setEnabled(nextValue) {
     clean();
@@ -318,7 +327,7 @@
     toggle.disabled = motion.matches;
     toggle.title = motion.matches
       ? 'Nightmare Mode is disabled while reduced motion is enabled'
-      : 'Optional visual scares including crawling hands, false cursors, and full-screen faces. Press Escape to exit.';
+      : 'Optional visual scares including pressing faces, glitch messages, and fake cursors. Press Escape to exit.';
   }
 
   window.addEventListener('pointermove', event => {
