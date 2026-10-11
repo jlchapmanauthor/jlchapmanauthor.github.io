@@ -331,7 +331,8 @@
 
       const tracks = {
         carnival: {
-          src: 'The%20Malfunctioning%20Carnival%20(Remastered).m4a',
+          src: 'the-malfunctioning-carnival.mp3',
+          fallback: 'The%20Malfunctioning%20Carnival%20(Remastered).m4a',
           title: 'The Malfunctioning Carnival'
         },
         hallway: {
@@ -406,16 +407,26 @@
         }
       });
 
-      function checkTrack(id) {
+      async function audioExists(src) {
+        try {
+          const response = await fetch(src, { method: 'HEAD', cache: 'no-store' });
+          return response.ok &&
+            !(response.headers.get('content-type') || '').includes('text/html');
+        } catch {
+          return false;
+        }
+      }
+
+      async function checkTrack(id) {
         const track = tracks[id];
-        return fetch(track.src, { method: 'HEAD', cache: 'no-store' })
-          .then(response => response.ok &&
-            !(response.headers.get('content-type') || '').includes('text/html'))
-          .catch(() => false)
-          .then(ok => {
-            if (ok) available.add(id);
-            return ok;
-          });
+        let ok = await audioExists(track.src);
+        // Until the converted MP3 is uploaded, retain the original M4A.
+        if (!ok && track.fallback) {
+          ok = await audioExists(track.fallback);
+          if (ok) track.src = track.fallback;
+        }
+        if (ok) available.add(id);
+        return ok;
       }
 
       Promise.all([checkTrack('carnival'), checkTrack('hallway')])
@@ -434,6 +445,8 @@
             audio.src = tracks.hallway.src;
             trackPicker.value = 'hallway';
           }
+          // Prefer the MP3 once it's uploaded, but never break the old track.
+          audio.src = tracks[selected].src;
           // The chooser appears only if visitors have both songs to choose from.
           trackPicker.hidden = available.size < 2;
           control.hidden = false;
