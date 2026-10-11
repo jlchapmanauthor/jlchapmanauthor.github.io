@@ -1137,3 +1137,53 @@ a {
   .header-inner > .nav { gap: 0 5px; padding-bottom: 8px; }
   .header-inner > .nav a { min-height: 35px; max-width: 133px; padding: 2px 5px; font-size: .65rem; letter-spacing: .06em; }
 }
+
+
+/* Two optional horror soundtracks. The picker appears only after both
+   audio assets are available, keeping the original single-track UI intact. */
+.soundtrack-track-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.soundtrack-track[hidden] { display: none !important; }
+.header-actions .soundtrack-control {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+.soundtrack-track {
+  display: block;
+  max-width: min(196px, 43vw);
+  width: 164px;
+  min-height: 29px;
+  padding: 3px 22px 3px 9px;
+  border: 1px solid rgba(204, 154, 92, .56);
+  border-radius: 8px;
+  background: #160d0e;
+  color: #ead8bb;
+  font: 600 .69rem Georgia, "Times New Roman", serif;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+.soundtrack-track:focus-visible {
+  outline: 2px solid #d3a24c;
+  outline-offset: 2px;
+}
+@media (max-width: 620px) {
+  .soundtrack-track {
+    width: 142px;
+    max-width: 45vw;
+    min-height: 30px;
+    font-size: .68rem;
+  }
+  .header-actions .soundtrack-control { gap: 4px; }
+}
+@media (max-width: 390px) {
+  .soundtrack-track { width: 124px; max-width: 39vw; }
+}
