@@ -38,6 +38,9 @@
   let lastKind = '';
   let lastCursorAt = 0;
   let lastDollAt = 0;
+  let lastGlassAt = 0;
+  let glassVideoAvailable = false;
+  let activeGlassVideo = null;
   let shown = 0;
   let activatedAt = 0;
   let lastPointer = null;
@@ -75,7 +78,14 @@
     animations.clear();
     if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; }
     clearPressure();
+    if (activeGlassVideo) {
+      activeGlassVideo.pause();
+      activeGlassVideo.removeAttribute('src');
+      activeGlassVideo.load();
+      activeGlassVideo = null;
+    }
     layer.replaceChildren();
+    layer.setAttribute('aria-hidden', 'true');
     currentKind = '';
   }
   function blocked() {
@@ -385,6 +395,63 @@
     stopEvent(6150);
   }
 
+
+  /* Only run the full-screen, muted video once the visitor opted in AND
+     the video is present in GitHub Pages. Never take over browser fullscreen. */
+  function behindGlass() {
+    const overlay = document.createElement('div');
+    overlay.className = 'nm-glass-overlay';
+    overlay.setAttribute('role', 'group');
+    overlay.setAttribute('aria-label', 'Something Behind the Glass horror video');
+    const video = document.createElement('video');
+    video.className = 'nm-glass-video';
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.controls = false;
+    video.preload = 'auto';
+    video.setAttribute('playsinline', '');
+    video.setAttribute('aria-hidden', 'true');
+
+    const skip = document.createElement('button');
+    skip.className = 'nm-glass-skip';
+    skip.type = 'button';
+    skip.textContent = 'Skip scare ×';
+    skip.setAttribute('aria-label', 'Skip this Nightmare Mode video');
+
+    overlay.appendChild(video);
+    overlay.appendChild(skip);
+    layer.appendChild(overlay);
+    layer.setAttribute('aria-hidden', 'false');
+    activeGlassVideo = video;
+    function endGlass() {
+      if (!enabled || currentKind !== 'glass') return;
+      clean();
+      schedule(false);
+    }
+    skip.addEventListener('click', endGlass);
+    video.addEventListener('ended', () => {
+      if (enabled && currentKind === 'glass') {
+        // Let the last handprint linger for a moment.
+        after(1700, endGlass);
+      }
+    }, { once: true });
+    video.addEventListener('error', () => {
+      glassVideoAvailable = false;
+      endGlass();
+    }, { once: true });
+    video.src = 'nightmare-behind-the-glass.mp4';
+    const playback = video.play();
+    if (playback && typeof playback.catch === 'function') {
+      playback.catch(() => {
+        glassVideoAvailable = false;
+        endGlass();
+      });
+    }
+    // Do not leave a black screen behind if video cannot complete.
+    after(24000, endGlass);
+  }
+
   function choose() {
     const sinceStart = now() - activatedAt;
     const cursorAllowed = shown >= 3 && sinceStart > 85000 &&
@@ -394,6 +461,11 @@
     const kinds = ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face'];
     if (cursorAllowed) kinds.push('cursor');
     if (dollAllowed) kinds.push('doll', 'doll');
+    // Rare long-form scare. Exclude until the MP4 has been uploaded.
+    if (glassVideoAvailable && shown >= 3 && sinceStart > 120000 &&
+        (lastGlassAt === 0 || now() - lastGlassAt > 8 * 60 * 1000)) {
+      kinds.push('glass');
+    }
     let kind = pick(kinds);
     if (kind === lastKind) kind = pick(kinds.filter(k => k !== lastKind));
     return kind;
@@ -407,6 +479,7 @@
     shown++;
     if (kind === 'cursor') { lastCursorAt = now(); cursedCursor(); }
     else if (kind === 'doll') { lastDollAt = now(); cursedDoll(); }
+    else if (kind === 'glass') { lastGlassAt = now(); behindGlass(); }
     else if (kind === 'watcher') watcher();
     else if (kind === 'glitch') glitchMessage();
     else pressedFace();
@@ -430,6 +503,17 @@
       activatedAt = now();
       lastCursorAt = 0;
       lastDollAt = 0;
+      lastGlassAt = 0;
+      glassVideoAvailable = false;
+      // Do not download a large MP4 until it is an available opt-in scare.
+      fetch('nightmare-behind-the-glass.mp4', { method: 'HEAD', cache: 'no-store' })
+        .then(response => {
+          const type = response.headers.get('content-type') || '';
+          if (enabled && response.ok && !type.includes('text/html')) {
+            glassVideoAvailable = true;
+          }
+        })
+        .catch(() => {});
       shown = 0;
       lastKind = '';
       schedule(true);
@@ -441,7 +525,7 @@
     toggle.disabled = motion.matches;
     toggle.title = motion.matches
       ? 'Nightmare Mode is disabled while reduced motion is enabled'
-      : 'Optional visual scares including pressing faces, glitch messages, fake cursors and a haunted doll. Press Escape to exit.';
+      : 'Optional visual scares including pressing faces, glitch messages, fake cursors, a haunted doll and an occasional full-screen glass apparition. Press Escape to exit.';
   }
 
   window.addEventListener('pointermove', event => {
