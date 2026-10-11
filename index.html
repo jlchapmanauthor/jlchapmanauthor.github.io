@@ -9,6 +9,7 @@
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
   <link rel="stylesheet" href="style.css?v=industrial-soundtrack-20261010" />
+  <link rel="stylesheet" href="nightmare.css?v=nightmare-mode-20261010" />
 </head>
 
 <body>
@@ -44,11 +45,27 @@
         <input id="soundtrack-volume" class="soundtrack-volume" type="range"
                min="0" max="100" value="25" aria-label="Soundtrack volume">
       </div>
+
+      <button type="button" class="nm-toggle" id="nightmare-toggle"
+              aria-pressed="false" aria-describedby="nightmare-description"
+              title="Optional randomized visual scares, including rare full-screen apparitions">
+        <span class="nm-toggle__symbol" aria-hidden="true">◉</span>
+        <span>Nightmare</span>
+        <span class="nm-toggle__state" id="nightmare-state" aria-hidden="true">Off</span>
+      </button>
+      <span class="nm-sr-only" id="nightmare-description">
+        Enable optional randomized visual horror effects, including occasional full-screen scares.
+        No sudden audio. Press Escape or this button again to turn off. 
+        Nightmare Mode is disabled if reduced motion is enabled in device settings.
+      </span>
     </div>
   </header>
 
   <audio id="site-soundtrack" src="The%20Malfunctioning%20Carnival%20(Remastered).m4a"
          loop preload="none" aria-hidden="true"></audio>
+
+  <!-- Visual effects are empty and fully inert until a visitor enables Nightmare Mode. -->
+  <div class="nightmare-layer" id="nightmare-layer" aria-hidden="true"></div>
 
   <main>
 
@@ -336,5 +353,6 @@
         .catch(() => {});
     })();
   </script>
+  <script src="nightmare.js?v=nightmare-mode-20261010" defer></script>
 </body>
                 </html>
