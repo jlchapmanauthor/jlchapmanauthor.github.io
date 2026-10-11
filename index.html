@@ -8,7 +8,7 @@
 
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
-  <link rel="stylesheet" href="style.css?v=heartbeat-sigil-20261010" />
+  <link rel="stylesheet" href="style.css?v=industrial-soundtrack-20261010" />
 </head>
 
 <body>
@@ -31,8 +31,24 @@
         <a href="#readers">Readers</a>
         <a href="#contact">Contact</a>
       </nav>
+
+      <!-- Audio stays opt-in and the control is hidden until the file is uploaded. -->
+      <div class="soundtrack-control" id="soundtrack-control" hidden>
+        <button type="button" class="soundtrack-toggle" id="soundtrack-toggle"
+                aria-label="Play the horror soundtrack" aria-pressed="false"
+                title="Play The Malfunctioning Carnival">
+          <span class="soundtrack-icon" aria-hidden="true">♫</span>
+          <span class="soundtrack-label">Music</span>
+        </button>
+        <label class="soundtrack-volume-label" for="soundtrack-volume">Volume</label>
+        <input id="soundtrack-volume" class="soundtrack-volume" type="range"
+               min="0" max="100" value="25" aria-label="Soundtrack volume">
+      </div>
     </div>
   </header>
+
+  <audio id="site-soundtrack" src="the-malfunctioning-carnival.mp3"
+         loop preload="none" aria-hidden="true"></audio>
 
   <main>
 
@@ -269,5 +285,56 @@
     </div>
   </footer>
 
+  <script>
+    (() => {
+      const audio = document.getElementById('site-soundtrack');
+      const control = document.getElementById('soundtrack-control');
+      const toggle = document.getElementById('soundtrack-toggle');
+      const volume = document.getElementById('soundtrack-volume');
+      audio.volume = 0.25;
+
+      function updateButton() {
+        const playing = !audio.paused && !audio.ended;
+        toggle.setAttribute('aria-pressed', String(playing));
+        toggle.setAttribute('aria-label', playing ? 'Pause the horror soundtrack' : 'Play the horror soundtrack');
+        toggle.setAttribute('title', playing ? 'Pause The Malfunctioning Carnival' : 'Play The Malfunctioning Carnival');
+        toggle.classList.toggle('is-playing', playing);
+        toggle.querySelector('.soundtrack-icon').textContent = playing ? '♪' : '♫';
+      }
+
+      toggle.addEventListener('click', async () => {
+        if (!audio.paused) {
+          audio.pause();
+          return;
+        }
+        try {
+          await audio.play();
+        } catch {
+          audio.pause();
+          toggle.setAttribute('title', 'The soundtrack could not be played');
+        }
+        updateButton();
+      });
+
+      volume.addEventListener('input', () => {
+        audio.volume = Number(volume.value) / 100;
+      });
+      audio.addEventListener('play', updateButton);
+      audio.addEventListener('pause', updateButton);
+      audio.addEventListener('error', () => {
+        control.hidden = true;
+      });
+
+      // Avoid a dead play button until the audio has been added to the repository.
+      fetch(audio.getAttribute('src'), { method: 'HEAD', cache: 'no-store' })
+        .then(response => {
+          if (response.ok && (response.headers.get('content-type') || '').indexOf('text/html') === -1) {
+            control.hidden = false;
+            updateButton();
+          }
+        })
+        .catch(() => {});
+    })();
+  </script>
 </body>
                 </html>
