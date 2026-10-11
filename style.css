@@ -59,11 +59,20 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  background:
-    linear-gradient(90deg, rgba(5,5,5,0.78), rgba(16,8,7,0.64), rgba(5,5,5,0.78)),
-    url("jlc-header-texture-fixed.jpg") center / 192px 96px repeat;
+  /* Weathered charcoal and muted copper run across the entire fixed bar. */
+  background-color: #100d0c;
+  background-image:
+    linear-gradient(90deg, rgba(5,5,5,0.24), rgba(12,6,5,0.10) 48%, rgba(5,5,5,0.28)),
+    radial-gradient(ellipse 530px 130px at 13% 38%, rgba(111,51,38,0.46), transparent 82%),
+    radial-gradient(ellipse 720px 160px at 59% 53%, rgba(74,66,64,0.48), transparent 78%),
+    radial-gradient(ellipse 440px 120px at 94% 45%, rgba(120,53,36,0.36), transparent 80%),
+    repeating-linear-gradient(110deg, rgba(191,122,86,0.045) 0 1px, transparent 1px 8px),
+    url("jlc-header-texture-fixed.jpg");
+  background-position: center;
+  background-size: auto, auto, auto, auto, auto, 192px 96px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat, repeat;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(164, 119, 52, 0.35);
+  border-bottom: 1px solid rgba(164, 119, 52, 0.55);
 }
 
 .header-inner {
