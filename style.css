@@ -787,3 +787,11 @@ a {
   .work-cover { width: min(180px, 100%); }
   .work-card-copy { max-width: 30rem; }
 }
+
+/* What We Killed book hook */
+.work-card-copy .work-tagline {
+  margin-top: 14px !important;
+  color: var(--gold-bright) !important;
+  font-style: italic;
+  font-size: .94rem !important;
+}
