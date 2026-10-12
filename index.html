@@ -8,7 +8,7 @@
 
   <meta name="description" content="Official J.L. Chapman horror author website. Explore the complete Dead Man Theater trilogy, works in progress, and Fulfillment, a completed manuscript seeking representation.">
 
-  <link rel="stylesheet" href="style.css?v=dual-soundtracks-20261011" />
+  <link rel="stylesheet" href="style.css?v=analytics-20261012" />
   <link rel="stylesheet" href="nightmare.css?v=behind-glass-video-20261011" />
 </head>
 
@@ -138,7 +138,7 @@
                 A comedy festival at an old haunted theater turns into a night of secrets, shame, and judgment as something in the dark begins peeling people open.
               </p>
 
-              <a class="button primary" href="https://www.amazon.com/dp/B0GMS4YGDX" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+              <a class="button primary" href="https://www.amazon.com/dp/B0GMS4YGDX" target="_blank" rel="noopener noreferrer" data-analytics="amazon-buy" data-book-title="The Last Laugh" data-book-id="B0GMS4YGDX">Buy on Amazon</a>
             </div>
           </article>
 
@@ -154,7 +154,7 @@
                 A gaming livestream crew enters Dead Man Theater chasing content, attention, and fame. The theater has other plans, and the audience may be part of the trap.
               </p>
 
-              <a class="button primary" href="https://www.amazon.com/gp/product/B0GWXGZ8TP" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+              <a class="button primary" href="https://www.amazon.com/gp/product/B0GWXGZ8TP" target="_blank" rel="noopener noreferrer" data-analytics="amazon-buy" data-book-title="Crafted Content" data-book-id="B0GWXGZ8TP">Buy on Amazon</a>
             </div>
           </article>
 
@@ -164,7 +164,7 @@
               <p class="small-label">Available Now · Book Three</p>
               <h3>The Final Cut</h3>
               <p>The Dead Man Theater's horrors have escaped the stage. A journalist follows a trail of murders, sinister masks, and an audience whose past choices refuse to stay buried.</p>
-              <a class="button primary" href="https://www.amazon.com/dp/B0HKF4RKFX" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+              <a class="button primary" href="https://www.amazon.com/dp/B0HKF4RKFX" target="_blank" rel="noopener noreferrer" data-analytics="amazon-buy" data-book-title="The Final Cut" data-book-id="B0HKF4RKFX">Buy on Amazon</a>
             </div>
           </article>
 
@@ -316,8 +316,22 @@
   <footer class="site-footer">
     <div class="container">
       <p>© 2026 J.L. Chapman. All rights reserved.</p>
+      <details class="analytics-privacy" id="analytics-privacy">
+        <summary>Privacy &amp; analytics</summary>
+        <p>This website uses optional Google Analytics to measure visits, traffic sources and interactions such as Amazon book-button clicks and Nightmare Mode activations. Google Analytics may use cookies and collect device and approximate location information. Analytics runs only if you choose to allow it. Amazon purchases are not tracked by this website.</p>
+        <p><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a></p>
+      </details>
+      <button class="analytics-preferences" id="analytics-preferences" type="button">Analytics preferences</button>
     </div>
   </footer>
+  <aside class="analytics-consent" id="analytics-consent" role="region"
+         aria-label="Optional website analytics" hidden>
+    <p>May I use Google Analytics to count website visits and Amazon book-link clicks? This uses optional analytics cookies. You can change your choice anytime in the footer.</p>
+    <div class="analytics-consent-actions">
+      <button type="button" id="analytics-allow" class="analytics-allow">Allow analytics</button>
+      <button type="button" id="analytics-decline" class="analytics-decline">No thanks</button>
+    </div>
+  </aside>
 
   <script>
     (() => {
@@ -455,5 +469,6 @@
     })();
   </script>
   <script src="nightmare.js?v=behind-glass-video-20261011" defer></script>
+  <script src="site-analytics.js?v=ga4-20261012" defer></script>
 </body>
                 </html>
