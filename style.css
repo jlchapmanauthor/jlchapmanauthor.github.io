@@ -1187,3 +1187,81 @@ a {
 @media (max-width: 390px) {
   .soundtrack-track { width: 124px; max-width: 39vw; }
 }
+
+
+/* Privacy-aware GA4 tracking: clear, optional and unobtrusive. */
+.analytics-privacy {
+  max-width: 720px;
+  margin: 12px auto 0;
+  color: #baada0;
+  font: 400 .83rem/1.55 system-ui, -apple-system, sans-serif;
+}
+.analytics-privacy summary {
+  display: inline-block;
+  cursor: pointer;
+  color: #d7bc93;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.analytics-privacy p { margin: 8px 0; }
+.analytics-privacy a, .analytics-preferences { color: #e3bd8c; }
+.analytics-preferences {
+  border: 0;
+  margin: 5px auto 0;
+  padding: 5px 8px;
+  background: transparent;
+  font: 400 .8rem/1.4 system-ui, -apple-system, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.analytics-consent[hidden] { display: none !important; }
+.analytics-consent {
+  position: fixed;
+  z-index: 200;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 18px;
+  border: 1px solid rgba(199, 142, 99, .75);
+  border-radius: 12px;
+  background: #151113;
+  color: #f3e7da;
+  box-shadow: 0 8px 38px rgba(0,0,0,.9);
+  font: 400 .87rem/1.45 system-ui, -apple-system, sans-serif;
+}
+.analytics-consent p { margin: 0 0 12px; }
+.analytics-consent-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.analytics-consent-actions button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid #b98c70;
+  border-radius: 7px;
+  color: #f7e8d6;
+  background: #332022;
+  font: 600 .85rem system-ui, -apple-system, sans-serif;
+  cursor: pointer;
+}
+.analytics-consent-actions .analytics-decline {
+  background: transparent;
+  border-color: rgba(226, 204, 183, .45);
+}
+.analytics-consent-actions button:hover { background: #593338; }
+.analytics-consent-actions button:focus-visible,
+.analytics-preferences:focus-visible,
+.analytics-privacy summary:focus-visible {
+  outline: 2px solid #f7ca93;
+  outline-offset: 3px;
+}
+@media (max-width: 540px) {
+  .analytics-consent { padding: 13px; font-size: .8rem; }
+  .analytics-consent-actions { justify-content: stretch; }
+  .analytics-consent-actions button { flex: 1 1 140px; }
+}
