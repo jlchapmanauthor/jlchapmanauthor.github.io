@@ -39,6 +39,8 @@
   let lastCursorAt = 0;
   let lastDollAt = 0;
   let lastGlassAt = 0;
+  let lastSpiderAt = 0;
+  let spiderVideoAvailable = false;
   let glassVideoAvailable = false;
   let activeGlassVideo = null;
   let shown = 0;
@@ -452,6 +454,62 @@
     after(24000, endGlass);
   }
 
+
+  /* Rare vertical video pop-up, framed for both mobile and desktop.
+     Runs only after voluntary Nightmare Mode opt-in and asset availability. */
+  function spiderHallway() {
+    const overlay = document.createElement('div');
+    overlay.className = 'nm-glass-overlay nm-hallway-overlay';
+    overlay.setAttribute('role', 'group');
+    overlay.setAttribute('aria-label', 'Spider hallway Nightmare Mode video');
+
+    const video = document.createElement('video');
+    video.className = 'nm-glass-video nm-hallway-video';
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.controls = false;
+    video.preload = 'auto';
+    video.setAttribute('playsinline', '');
+    video.setAttribute('aria-hidden', 'true');
+
+    const skip = document.createElement('button');
+    skip.className = 'nm-glass-skip';
+    skip.type = 'button';
+    skip.textContent = 'Skip scare ×';
+    skip.setAttribute('aria-label', 'Skip spider hallway video');
+
+    overlay.appendChild(video);
+    overlay.appendChild(skip);
+    layer.appendChild(overlay);
+    layer.setAttribute('aria-hidden', 'false');
+    activeGlassVideo = video; // shared media cleanup handles both video events
+
+    function endSpider() {
+      if (!enabled || currentKind !== 'spider') return;
+      clean();
+      schedule(false);
+    }
+
+    skip.addEventListener('click', endSpider);
+    video.addEventListener('ended', () => after(650, endSpider), { once: true });
+    video.addEventListener('error', () => {
+      spiderVideoAvailable = false;
+      endSpider();
+    }, { once: true });
+
+    video.src = 'nightmare-spider-hallway.mp4';
+    const playback = video.play();
+    if (playback && typeof playback.catch === 'function') {
+      playback.catch(() => {
+        spiderVideoAvailable = false;
+        endSpider();
+      });
+    }
+    // Clean up even if playback stalls on a slow mobile connection.
+    after(18500, endSpider);
+  }
+
   function choose() {
     const sinceStart = now() - activatedAt;
     const cursorAllowed = shown >= 3 && sinceStart > 85000 &&
@@ -461,6 +519,11 @@
     const kinds = ['watcher', 'watcher', 'glitch', 'glitch', 'face', 'face'];
     if (cursorAllowed) kinds.push('cursor');
     if (dollAllowed) kinds.push('doll', 'doll');
+    // A separate rare video scare; no file download until it actually plays.
+    if (spiderVideoAvailable && shown >= 2 && sinceStart > 65000 &&
+        (lastSpiderAt === 0 || now() - lastSpiderAt > 5 * 60 * 1000)) {
+      kinds.push('spider');
+    }
     // Rare long-form scare. Exclude until the MP4 has been uploaded.
     if (glassVideoAvailable && shown >= 3 && sinceStart > 120000 &&
         (lastGlassAt === 0 || now() - lastGlassAt > 8 * 60 * 1000)) {
@@ -480,6 +543,7 @@
     if (kind === 'cursor') { lastCursorAt = now(); cursedCursor(); }
     else if (kind === 'doll') { lastDollAt = now(); cursedDoll(); }
     else if (kind === 'glass') { lastGlassAt = now(); behindGlass(); }
+    else if (kind === 'spider') { lastSpiderAt = now(); spiderHallway(); }
     else if (kind === 'watcher') watcher();
     else if (kind === 'glitch') glitchMessage();
     else pressedFace();
@@ -504,7 +568,17 @@
       lastCursorAt = 0;
       lastDollAt = 0;
       lastGlassAt = 0;
+      lastSpiderAt = 0;
       glassVideoAvailable = false;
+      spiderVideoAvailable = false;
+      fetch('nightmare-spider-hallway.mp4', { method: 'HEAD', cache: 'no-store' })
+        .then(response => {
+          const type = response.headers.get('content-type') || '';
+          if (enabled && response.ok && !type.includes('text/html')) {
+            spiderVideoAvailable = true;
+          }
+        })
+        .catch(() => {});
       // Do not download a large MP4 until it is an available opt-in scare.
       fetch('nightmare-behind-the-glass.mp4', { method: 'HEAD', cache: 'no-store' })
         .then(response => {
@@ -525,7 +599,7 @@
     toggle.disabled = motion.matches;
     toggle.title = motion.matches
       ? 'Nightmare Mode is disabled while reduced motion is enabled'
-      : 'Optional visual scares including pressing faces, glitch messages, fake cursors, a haunted doll and an occasional full-screen glass apparition. Press Escape to exit.';
+      : 'Optional visual scares including pressing faces, glitch messages, fake cursors, a haunted doll, and occasional spider or glass apparition videos. Press Escape to exit.';
   }
 
   window.addEventListener('pointermove', event => {
