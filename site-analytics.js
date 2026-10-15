@@ -2,7 +2,7 @@
    Analytics isn't loaded until the visitor consents. */
 (() => {
   'use strict';
-  const MEASUREMENT_ID = 'G-Y70N0HV91X';
+  const MEASUREMENT_ID = 'G-6WGC231R13';
   const CONSENT_KEY = 'jlc_analytics_choice_v1';
   const banner = document.getElementById('analytics-consent');
   const accept = document.getElementById('analytics-allow');
